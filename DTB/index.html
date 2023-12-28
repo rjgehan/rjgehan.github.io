@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<script>
+   function showCustomFields(selector, customFieldId) {
+      var value = selector.value;
+      var customFields = document.getElementById(customFieldId);
+      if (value === 'custom') {
+         customFields.style.display = 'block';
+      } else {
+         customFields.style.display = 'none';
+      }
+   }
+
+   function updatePlayerVisibility() {
+      var numberOfPlayers = document.getElementById('playerNumberPicker').value;
+      var playerSections = document.getElementsByClassName('player-section');
+
+      for (var i = 0; i < playerSections.length; i++) {
+         if (i < numberOfPlayers) {
+            playerSections[i].style.display = 'block';
+         } else {
+            playerSections[i].style.display = 'none';
+         }
+      }
+   }
+
+   function toggleCustomInputs(checkbox, fieldsId) {
+      var additionalFields = document.getElementById(fieldsId);
+      additionalFields.style.display = checkbox.checked ? 'block' : 'none';
+   }
+
+   function submitForm() {
+      var numberOfPlayers = document.getElementById('playerNumberPicker').value;
+      var loadouts = {};
+
+      for (let i = 1; i <= numberOfPlayers; i++) {
+         var userLoadout = {
+            loadout: document.getElementById(`loadoutSelector${i}`).value,
+            class: document.getElementById(`classSelector${i}`).value,
+            customLoadout: document.getElementById(`checkbox${i}`).checked,
+            primary: document.querySelector(`#customFields${i} input:nth-child(1)`).value,
+            special: document.querySelector(`#customFields${i} input:nth-child(2)`).value,
+            heavy: document.querySelector(`#customFields${i} input:nth-child(3)`).value
+         };
+         if (userLoadout.customLoadout) {
+            userLoadout.additionalFields = {
+               ammoPerk1: document.querySelector(`#additionalFields${i} div:nth-child(1) input:nth-child(1)`).value,
+               ammoPerk2: document.querySelector(`#additionalFields${i} div:nth-child(1) input:nth-child(2)`).value,
+               ammoPerk3: document.querySelector(`#additionalFields${i} div:nth-child(1) input:nth-child(3)`).value,
+               damagePerk1: document.querySelector(`#additionalFields${i} div:nth-child(2) input:nth-child(1)`).value,
+               damagePerk2: document.querySelector(`#additionalFields${i} div:nth-child(2) input:nth-child(2)`).value,
+               damagePerk3: document.querySelector(`#additionalFields${i} div:nth-child(2) input:nth-child(3)`).value
+            };
+         }
+         loadouts['Player' + i] = userLoadout;
+      }
+
+      console.log(loadouts);
+   }
+
+
+</script>
+
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width" />
+   <title>Destiny Tool Belt</title>
+   <!-- <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png"> -->
+   <meta name="description" content="Ryan Gehan" />
+   <meta property="og:title" content="Ryan Gehan" />
+   <meta property="og:description" content="Ryan Gehan" />
+   <link rel="stylesheet" type="text/css" href="style.css">
+   <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
+      integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+   <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-white dark:bg-neutral-900 text-black dark:text-white overflow-x-hidden">
+   <div id="hero" class="p-8 border-b border-neutral-100 dark:border-neutral-800">
+      <h1 class="text-xl text-md font-medium">Destiny Tool Belt</h1>
+   </div>
+
+
+
+   <ul id="professional" class="border-b border-neutral-100 dark:border-neutral-800">
+      <li class="pb-8">
+         <div class="p-8">
+            <h3 class="text-md font-medium">DPS Calculator</h3>
+
+            <select id="playerNumberPicker" onchange="updatePlayerVisibility()">
+               <option value="1">1 Player</option>
+               <option value="2">2 Players</option>
+               <option value="3">3 Players</option>
+               <option value="4">4 Player</option>
+               <option value="5">5 Players</option>
+               <option value="6">6 Players</option>
+               <!-- Add more options as needed -->
+            </select>
+
+            <!-- 1----------------------------------------------------------------------- -->
+            <div id="player1" class="player-section">
+               <h3 class="text-md font-medium">Player 1</h3>
+               <select id="loadoutSelector1" onchange="showCustomFields(this, 'customFields1')">
+                  <option value="" disabled selected>Select a Loadout</option>
+                  <option value="IzanagiRocket">Izanagi + Rocket</option>
+                  <option value="IzanagiRocketGL">Izanagi + Rocket + GL</option>
+                  <option value="ChillClipDragonsBreath">Chill Clip + Dragons Breath</option>
+                  <option value="Lament">Lament</option>
+                  <option value="Lament">Witherhoard + BnS Linear</option>
+                  <option value="custom">Custom</option>
+               </select>
+               <select id="classSelector1">
+                  <option value="" disabled selected>Select a Class</option>
+                  <option value="Hunter">Hunter</option>
+                  <option value="Titan">Titan</option>
+                  <option value="Warlock">Warlock</option>
+               </select>
+               <input type="checkbox" id="checkbox1" onchange="toggleCustomInputs(this, 'additionalFields1')">
+               <label for="checkbox1">Use specific perks</label>
+               <div id="customFields1" style="display:none;">
+                  <input type="text" placeholder="Primary">
+                  <input type="text" placeholder="Special">
+                  <input type="text" placeholder="Heavy">
+               </div>
+               <div id="additionalFields1" style="display:none;">
+                  <div>
+                     <input type="text" placeholder="Ammo Perk 1">
+                     <input type="text" placeholder="Ammo Perk 2">
+                     <input type="text" placeholder="Ammo Perk 3">
+                  </div>
+                  <div>
+                     <input type="text" placeholder="Damage Perk 1">
+                     <input type="text" placeholder="Damage Perk 2">
+                     <input type="text" placeholder="Damage Perk 3">
+                  </div>
+               </div>
+            </div>
+            <!-- 2----------------------------------------------------------------------- -->
+            <div id="player2" class="player-section" style="display:none;">
+               <h3 class="text-md font-medium">Player 2</h3>
+               <select id="loadoutSelector2" onchange="showCustomFields(this, 'customFields2')">
+                  <option value="" disabled selected>Select a Loadout</option>
+                  <option value="IzanagiRocket">Izanagi + Rocket</option>
+                  <option value="IzanagiRocketGL">Izanagi + Rocket + GL</option>
+                  <option value="ChillClipDragonsBreath">Chill Clip + Dragons Breath</option>
+                  <option value="Lament">Lament</option>
+                  <option value="Lament">Witherhoard + BnS Linear</option>
+                  <option value="custom">Custom</option>
+               </select>
+               <select id="classSelector2">
+                  <option value="" disabled selected>Select a Class</option>
+                  <option value="Hunter">Hunter</option>
+                  <option value="Titan">Titan</option>
+                  <option value="Warlock">Warlock</option>
+               </select>
+               <input type="checkbox" id="checkbox2" onchange="toggleCustomInputs(this, 'additionalFields2')">
+               <label for="checkbox2">Use specific perks</label>
+               <div id="customFields2" style="display:none;">
+                  <input type="text" placeholder="Primary">
+                  <input type="text" placeholder="Special">
+                  <input type="text" placeholder="Heavy">
+               </div>
+               <div id="additionalFields2" style="display:none;">
+                  <div>
+                     <input type="text" placeholder="Ammo Perk 1">
+                     <input type="text" placeholder="Ammo Perk 2">
+                     <input type="text" placeholder="Ammo Perk 3">
+                  </div>
+                  <div>
+                     <input type="text" placeholder="Damage Perk 1">
+                     <input type="text" placeholder="Damage Perk 2">
+                     <input type="text" placeholder="Damage Perk 3">
+                  </div>
+               </div>
+            </div>
+            <!-- 3----------------------------------------------------------------------- -->
+            <div id="player3" class="player-section" style="display:none;">
+               <h3 class="text-md font-medium">Player 3</h3>
+               <select id="loadoutSelector3" onchange="showCustomFields(this, 'customFields3')">
+                  <option value="" disabled selected>Select a Loadout</option>
+                  <option value="IzanagiRocket">Izanagi + Rocket</option>
+                  <option value="IzanagiRocketGL">Izanagi + Rocket + GL</option>
+                  <option value="ChillClipDragonsBreath">Chill Clip + Dragons Breath</option>
+                  <option value="Lament">Lament</option>
+                  <option value="Lament">Witherhoard + BnS Linear</option>
+                  <option value="custom">Custom</option>
+               </select>
+               <select id="classSelector3">
+                  <option value="" disabled selected>Select a Class</option>
+                  <option value="Hunter">Hunter</option>
+                  <option value="Titan">Titan</option>
+                  <option value="Warlock">Warlock</option>
+               </select>
+               <input type="checkbox" id="checkbox3" onchange="toggleCustomInputs(this, 'additionalFields3')">
+               <label for="checkbox3">Use specific perks</label>
+               <div id="customFields3" style="display:none;">
+                  <input type="text" placeholder="Primary">
+                  <input type="text" placeholder="Special">
+                  <input type="text" placeholder="Heavy">
+               </div>
+               <div id="additionalFields3" style="display:none;">
+                  <div>
+                     <input type="text" placeholder="Ammo Perk 1">
+                     <input type="text" placeholder="Ammo Perk 2">
+                     <input type="text" placeholder="Ammo Perk 3">
+                  </div>
+                  <div>
+                     <input type="text" placeholder="Damage Perk 1">
+                     <input type="text" placeholder="Damage Perk 2">
+                     <input type="text" placeholder="Damage Perk 3">
+                  </div>
+               </div>
+            </div>
+            <!-- 4----------------------------------------------------------------------- -->
+            <div id="player4" class="player-section" style="display:none;">
+               <h3 class="text-md font-medium">Player 4</h3>
+               <select id="loadoutSelector4" onchange="showCustomFields(this, 'customFields4')">
+                  <option value="" disabled selected>Select a Loadout</option>
+                  <option value="IzanagiRocket">Izanagi + Rocket</option>
+                  <option value="IzanagiRocketGL">Izanagi + Rocket + GL</option>
+                  <option value="ChillClipDragonsBreath">Chill Clip + Dragons Breath</option>
+                  <option value="Lament">Lament</option>
+                  <option value="Lament">Witherhoard + BnS Linear</option>
+                  <option value="custom">Custom</option>
+               </select>
+               <select id="classSelector4">
+                  <option value="" disabled selected>Select a Class</option>
+                  <option value="Hunter">Hunter</option>
+                  <option value="Titan">Titan</option>
+                  <option value="Warlock">Warlock</option>
+               </select>
+               <input type="checkbox" id="checkbox4" onchange="toggleCustomInputs(this, 'additionalFields4')">
+               <label for="checkbox4">Use specific perks</label>
+               <div id="customFields4" style="display:none;">
+                  <input type="text" placeholder="Primary">
+                  <input type="text" placeholder="Special">
+                  <input type="text" placeholder="Heavy">
+               </div>
+               <div id="additionalFields4" style="display:none;">
+                  <div>
+                     <input type="text" placeholder="Ammo Perk 1">
+                     <input type="text" placeholder="Ammo Perk 2">
+                     <input type="text" placeholder="Ammo Perk 3">
+                  </div>
+                  <div>
+                     <input type="text" placeholder="Damage Perk 1">
+                     <input type="text" placeholder="Damage Perk 2">
+                     <input type="text" placeholder="Damage Perk 3">
+                  </div>
+               </div>
+            </div>
+            <!-- 5----------------------------------------------------------------------- -->
+            <div id="player5" class="player-section" style="display:none;">
+               <h3 class="text-md font-medium">Player 5</h3>
+               <select id="loadoutSelector5" onchange="showCustomFields(this, 'customFields5')">
+                  <option value="" disabled selected>Select a Loadout</option>
+                  <option value="IzanagiRocket">Izanagi + Rocket</option>
+                  <option value="IzanagiRocketGL">Izanagi + Rocket + GL</option>
+                  <option value="ChillClipDragonsBreath">Chill Clip + Dragons Breath</option>
+                  <option value="Lament">Lament</option>
+                  <option value="Lament">Witherhoard + BnS Linear</option>
+                  <option value="custom">Custom</option>
+               </select>
+               <select id="classSelector5">
+                  <option value="" disabled selected>Select a Class</option>
+                  <option value="Hunter">Hunter</option>
+                  <option value="Titan">Titan</option>
+                  <option value="Warlock">Warlock</option>
+               </select>
+               <input type="checkbox" id="checkbox5" onchange="toggleCustomInputs(this, 'additionalFields5')">
+               <label for="checkbox5">Use specific perks</label>
+               <div id="customFields5" style="display:none;">
+                  <input type="text" placeholder="Primary">
+                  <input type="text" placeholder="Special">
+                  <input type="text" placeholder="Heavy">
+               </div>
+               <div id="additionalFields5" style="display:none;">
+                  <div>
+                     <input type="text" placeholder="Ammo Perk 1">
+                     <input type="text" placeholder="Ammo Perk 2">
+                     <input type="text" placeholder="Ammo Perk 3">
+                  </div>
+                  <div>
+                     <input type="text" placeholder="Damage Perk 1">
+                     <input type="text" placeholder="Damage Perk 2">
+                     <input type="text" placeholder="Damage Perk 3">
+                  </div>
+               </div>
+            </div>
+            <!-- 6----------------------------------------------------------------------- -->
+            <div id="player6" class="player-section" style="display:none;">
+               <h3 class="text-md font-medium">Player 6</h3>
+               <select id="loadoutSelector6" onchange="showCustomFields(this, 'customFields6')">
+                  <option value="" disabled selected>Select a Loadout</option>
+                  <option value="IzanagiRocket">Izanagi + Rocket</option>
+                  <option value="IzanagiRocketGL">Izanagi + Rocket + GL</option>
+                  <option value="ChillClipDragonsBreath">Chill Clip + Dragons Breath</option>
+                  <option value="Lament">Lament</option>
+                  <option value="Lament">Witherhoard + BnS Linear</option>
+                  <option value="custom">Custom</option>
+               </select>
+               <select id="classSelector6">
+                  <option value="" disabled selected>Select a Class</option>
+                  <option value="Hunter">Hunter</option>
+                  <option value="Titan">Titan</option>
+                  <option value="Warlock">Warlock</option>
+               </select>
+               <input type="checkbox" id="checkbox6" onchange="toggleCustomInputs(this, 'additionalFields6')">
+               <label for="checkbox6">Use specific perks</label>
+               <div id="customFields6" style="display:none;">
+                  <input type="text" placeholder="Primary">
+                  <input type="text" placeholder="Special">
+                  <input type="text" placeholder="Heavy">
+               </div>
+               <div id="additionalFields6" style="display:none;">
+                  <div>
+                     <input type="text" placeholder="Ammo Perk 1">
+                     <input type="text" placeholder="Ammo Perk 2">
+                     <input type="text" placeholder="Ammo Perk 3">
+                  </div>
+                  <div>
+                     <input type="text" placeholder="Damage Perk 1">
+                     <input type="text" placeholder="Damage Perk 2">
+                     <input type="text" placeholder="Damage Perk 3">
+                  </div>
+               </div>
+            </div>
+            <button type="button" onclick="submitForm()">Submit</button>
+
+         </div>
+      </li>
+   </ul>
+
+   <!-- Links -->
+   <ul id="other" class="p-8">
+      <li class="pb-8">
+         <h3 class="text-md font-medium pb-4">Links</h3>
+         <ul class="text-md opacity-60 flex flex-col gap-1">
+            <!-- Update with your resume and CV file paths -->
+            <li><a href="../index.html">Home</a></li>
+         </ul>
+      </li>
+
+      <!-- Any additional resources or links can be added here -->
+
+   </ul>
+</body>
+
+</html>
