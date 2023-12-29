@@ -1,6 +1,30 @@
 <!DOCTYPE html>
 <html>
 <script>
+   function testAPI(word) {
+      fetch(`https://www.bungie.net/Platform/Destiny2/Armory/Search/DestinyInventoryItemDefinition/${word}/`, {
+         headers: {
+            'X-API-Key': '6467501de168494c97c7a9b00aa2653e'
+         }
+      })
+      .then(response => response.json())
+      .then(data => {
+         const results = data.Response.results.results;
+         const resultsContainer = document.getElementById('apiResults');
+         resultsContainer.innerHTML = ''; // Clear previous results
+         results.forEach(item => {
+            const itemDiv = document.createElement('div');
+            //if its a weapon
+
+
+            //
+            itemDiv.innerHTML = `<p>${item.displayProperties.name} ${item.itemTypeDisplayName}</p><img src="https://www.bungie.net${item.displayProperties.icon}" alt="${item.displayProperties.name}" />`;
+            resultsContainer.appendChild(itemDiv);
+         });
+      });
+   }
+
+
    function showCustomFields(selector, customFieldId) {
       var value = selector.value;
       var customFields = document.getElementById(customFieldId);
@@ -85,6 +109,7 @@
 
    <ul id="professional" class="border-b border-neutral-100 dark:border-neutral-800">
       <li class="pb-8">
+         <!-- dtb selection -->
          <div class="p-8">
             <h3 class="text-md font-medium">DPS Calculator</h3>
 
@@ -329,6 +354,13 @@
             <button type="button" onclick="submitForm()">Submit</button>
 
          </div>
+
+         <div class="p-8">
+            <input type="text" id="apiSearchTerm" placeholder="Enter search term">
+            <button onclick="testAPI(document.getElementById('apiSearchTerm').value)">Search</button>
+            <div id="apiResults"></div>
+         </div>
+
       </li>
    </ul>
 
