@@ -1,0 +1,121 @@
+{
+    "Response": {
+      "displayProperties": {
+        "description": "",
+        "name": "",
+        "hasIcon": False
+      },
+      "reusablePlugItems": [
+        {
+          "craftingRequirements": {
+            "unlockRequirements": [
+              
+            ],
+            "materialRequirementHashes": [
+              
+            ]
+          },
+          "weight": 0.0,
+          "alternateWeight": 0.0,
+          "currentlyCanRoll": True,
+          "plugItemHash": 1478423395
+        },
+        {
+          "craftingRequirements": {
+            "unlockRequirements": [
+              
+            ],
+            "materialRequirementHashes": [
+              
+            ]
+          },
+          "weight": 0.0,
+          "alternateWeight": 0.0,
+          "currentlyCanRoll": True,
+          "plugItemHash": 1844523823
+        },
+        {
+          "craftingRequirements": {
+            "unlockRequirements": [
+              
+            ],
+            "materialRequirementHashes": [
+              
+            ]
+          },
+          "weight": 0.0,
+          "alternateWeight": 0.0,
+          "currentlyCanRoll": True,
+          "plugItemHash": 3809316345
+        },
+        {
+          "craftingRequirements": {
+            "unlockRequirements": [
+              
+            ],
+            "materialRequirementHashes": [
+              
+            ]
+          },
+          "weight": 0.0,
+          "alternateWeight": 0.0,
+          "currentlyCanRoll": True,
+          "plugItemHash": 981914802
+        },
+        {
+          "craftingRequirements": {
+            "unlockRequirements": [
+              
+            ],
+            "materialRequirementHashes": [
+              
+            ]
+          },
+          "weight": 0.0,
+          "alternateWeight": 0.0,
+          "currentlyCanRoll": True,
+          "plugItemHash": 1441682018
+        },
+        {
+          "craftingRequirements": {
+            "unlockRequirements": [
+              
+            ],
+            "materialRequirementHashes": [
+              
+            ]
+          },
+          "weight": 0.0,
+          "alternateWeight": 0.0,
+          "currentlyCanRoll": True,
+          "plugItemHash": 3525010810
+        },
+        {
+          "craftingRequirements": {
+            "unlockRequirements": [
+              
+            ],
+            "materialRequirementHashes": [
+              
+            ]
+          },
+          "weight": 0.0,
+          "alternateWeight": 0.0,
+          "currentlyCanRoll": True,
+          "plugItemHash": 3798852852
+        }
+      ],
+      "isFakePlugSet": False,
+      "hash": 3511466866,
+      "index": 408,
+      "redacted": False,
+      "blacklisted": False
+    },
+    "ErrorCode": 1,
+    "ThrottleSeconds": 0,
+    "ErrorStatus": "Success",
+    "Message": "Ok",
+    "MessageData": {
+      
+    }
+  }
