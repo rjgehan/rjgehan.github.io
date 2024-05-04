@@ -8,7 +8,7 @@ function toggleCalculateButton() {
 
 
 $(document).ready(function () {
-  fetch("ryangehan.com/dtb/gunstyles.json")
+  fetch("./gunstyles.json")
   .then(response => {
       if (!response.ok) {
           throw new Error('Network response was not ok ' + response.statusText);
