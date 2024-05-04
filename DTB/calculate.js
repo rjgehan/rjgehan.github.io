@@ -1,6 +1,6 @@
 function calculateDamage () {
   // Fetch both the gun styles and PvE bonus data
-  Promise.all([fetch('gunStyles.json').then(response => response.json())])
+  Promise.all([fetch('gunstyles.json').then(response => response.json())])
     .then(([gunData]) => {
       // Get the selected category and style from the dropdowns
       const category = document.getElementById('weaponCategory').value
