@@ -1,56 +1,115 @@
-function toggleCalculateButton() {
-  var weaponStyle = document.getElementById("weaponStyle");
-  var calculateButton = document.getElementById("calculateButton");
-
-  // Enable the calculate button only if a weapon style has been selected
-  calculateButton.disabled = !weaponStyle.value; // Disable if no value is selected
-}
-
-
 $(document).ready(function () {
-  fetch("gunstyles.json")
-  .then(response => {
-      if (!response.ok) {
-          throw new Error('Network response was not OK! ' + response.statusText);
-      }
-      return response.json();
-  })
-  .then(data => {
-      const categorySelect = $("#weaponCategory");
-      const styleSelect = $("#weaponStyle");
+    fetch("gunstyles.json")
+        .then(response => response.json())
+        .then(data => {
+            const categorySelect = $("#weaponCategory");
+            const styleSelect = $("#weaponStyle");
 
-      // Add default option and disable it
-      categorySelect.append($('<option>', { value: '', text: 'Pick one', disabled: true, selected: true }));
-      styleSelect.append($('<option>', { value: '', text: 'Pick one', disabled: true, selected: true }));
+            categorySelect.append($('<option>', { value: '', text: 'Pick one', disabled: true, selected: true }));
+            styleSelect.append($('<option>', { value: '', text: 'Pick one', disabled: true, selected: true }));
 
-      // Populate the weapon category dropdown
-      for (let category in data) {
-          categorySelect.append(new Option(category, category));
-      }
+            for (let category in data) {
+                categorySelect.append(new Option(category, category));
+            }
 
-      // Initialize both selects with Select2
-      categorySelect.select2({ placeholder: "Select a weapon category" });
-      styleSelect.select2({ placeholder: "Select a weapon style" }).prop("disabled", true);
+            categorySelect.select2({ placeholder: "Select a weapon category" });
+            styleSelect.select2({ placeholder: "Select a weapon style", disabled: true });
 
-      // When a category is selected
-      categorySelect.on("change", function () {
-          let category = $(this).val();
-          styleSelect.empty().prop("disabled", false); // Enable and clear the second dropdown
-          styleSelect.append($('<option>', { value: '', text: 'Pick one', disabled: true, selected: true })); // Add default option again
+            categorySelect.on("change", function () {
+                let category = $(this).val();
+                styleSelect.empty().prop("disabled", false);
+                styleSelect.append($('<option>', { value: '', text: 'Pick one', disabled: true, selected: true }));
 
-          // Populate the second dropdown based on the first dropdown's value
-          data[category].forEach(item => {
-              styleSelect.append(new Option(item.frame));
-          });
+                data[category].forEach(item => {
+                    styleSelect.append(new Option(item.frame));
+                });
 
-          styleSelect.select2({ placeholder: "Select a weapon style" }); // Reinitialize Select2
-      });
-  })
-  .catch(error => console.error("Error loading the gun styles:", error));
+                styleSelect.select2({ placeholder: "Select a weapon style" });
+            });
+        })
+        .catch(error => console.error("Error loading the gun styles:", error));
 
-  $("#weaponStyle").on("change", function () {
-      var calculateButton = document.getElementById("calculateButton");
-      calculateButton.disabled = !this.value; // Enable the calculate button only if a style is selected
-  });
+    $("#weaponStyle").on("change", function () {
+        var calculateButton = document.getElementById("calculateButton");
+        calculateButton.disabled = !this.value;
+    });
+
+    // Fetch and setup activities and difficulties
+    fetch('PLMulti.json')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('activityDisplay').textContent = "default - kali";
+            $("#armorPL").val(1830);
+            $("#weaponPL").val(1830);
+            $("#totalPL").val(1830);
+            $("#activity").append($('<option>', { value: '', text: 'Select an activity', disabled: true, selected: true }));
+            $("#difficulty").append($('<option>', { value: '', text: 'Select a difficulty', disabled: true, selected: true }));
+
+
+            const activityTypeSelect = $("#activityType");
+            const activitySelect = $("#activity");
+            const difficultySelect = $("#difficulty").prop('disabled', true);
+
+            activityTypeSelect.append($('<option>', { value: '', text: 'Select an activity type', disabled: true, selected: true }));
+
+            for (let type in data) {
+                activityTypeSelect.append($('<option>', { value: type, text: type }));
+            }
+
+            activityTypeSelect.select2({ placeholder: "Select an activity type", allowClear: true });
+
+            activityTypeSelect.on("change", function () {
+                const selectedType = $(this).val();
+                const selectedActivities = data[selectedType];
+
+                activitySelect.empty().prop("disabled", !selectedType);
+                activitySelect.append($('<option>', { value: '', text: 'Select an activity', disabled: true, selected: true }));
+
+                if (selectedType) {
+                    for (let activityName in selectedActivities) {
+                        activitySelect.append(new Option(activityName, activityName));
+                    }
+                }
+
+                activitySelect.select2({ placeholder: "Select an activity", allowClear: true });
+            });
+
+            $("#activity").on("change", function () {
+                const selectedActivity = $(this).val();
+                difficultySelect.prop('disabled', !selectedActivity); // Enable difficulty selection only if an activity is selected
+
+                if (selectedActivity) {
+                    // Adding options to the difficulty select element
+                    difficultySelect.empty();
+                    ["Normal", "Raid and Dungeon", "Master"].forEach(level => {
+                        difficultySelect.append(new Option(level, level));
+                    });
+
+                    updateActivityDisplay(data); // Call updateActivityDisplay with data parameter
+
+                    difficultySelect.on("change", function() {
+                        updateActivityDisplay(data); // Ensure data is available
+                    });
+                } else {
+                    document.getElementById('activityDisplay').textContent = 'Please select an activity to display details.';
+                    difficultySelect.prop('disabled', true).empty(); // Disable and clear if no activity is selected
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error loading the activities data:', error);
+        });
+
+    function updateActivityDisplay(data) {
+        const selectedActivity = $("#activity").val();
+        const activityTypeVal = $("#activityType").val();
+        const activityDetails = activityTypeVal ? data[activityTypeVal][selectedActivity] : null;
+        const difficultySelectVal = $('#difficulty').val(); // Get the current selected value of difficulty
+
+        if (selectedActivity && activityDetails) {
+            document.getElementById('activityDisplay').textContent = `${selectedActivity}, ${difficultySelectVal} Difficulty, Recommended Power Level: ${activityDetails['Recommended Power Level']}`;
+        } else {
+            document.getElementById('activityDisplay').textContent = 'Please select an activity and difficulty to display details.';
+        }
+    }
 });
-
